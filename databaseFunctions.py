@@ -21,8 +21,8 @@ def RemoveProgram(c, ProgramName):
     return
 
 #    - View Courses in Program
-def GetProgramsInCourse(c, programID):
-    return c.execute('SELECT * FROM Course_In_Program JOIN Courses ON Course_In_Program.Course_ID = Courses.ID WHERE Course_In_Program.Program_ID = ?', (programID,))
+def GetCoursesInProgram(c, programID):
+    return c.execute('SELECT Courses.id AS id, Course_In_Program.directed_group AS dir, Courses.course_code AS course_code, Courses.name as name, Courses.year_level as year_level FROM Course_In_Program JOIN Courses ON Course_In_Program.Course_ID = Courses.ID WHERE Course_In_Program.Program_ID = ?', (programID,))
 
 #    - Add Course to Program
 def AddCourseToProgram(c, programID, courseID, directedGroup):
@@ -52,3 +52,31 @@ def AddDirectedGroupToProgram(c, programID, groupNumber, requiredCourses):
 def RemoveDirectedGroupFromProgram(c, programID, groupNumber):
     c.execute('DELETE FROM Directed_Course_Requirements WHERE program_id = ? AND directed_group = ?', (programID, groupNumber))
     return
+
+# 2. Course Management:
+#    - View Courses
+def GetCourses(c):
+  res = c.execute('''SELECT * FROM Courses''')
+  return res
+
+#    - Add Course
+def AddCourse(c, courseCode, courseName, yearLevel):
+  c.execute('INSERT INTO Courses(course_code, name, year_level) VALUES (?,?,?)', (courseCode, courseName, yearLevel))
+  return
+
+#    - Remove Course
+def RemoveCourse(c, courseId):
+    c.execute('DELETE FROM Courses WHERE id = ?', (courseId,))
+    return
+
+def GetCoursePrecedents(c, courseID):
+    return c.execute(
+        '''SELECT 
+                b.id AS id, 
+                b.course_code as course_code, 
+                b.name AS name 
+            FROM 
+                course_precedence AS p 
+            JOIN courses AS a ON p.course_after_id = a.id 
+            JOIN courses AS b ON p.course_before_id = b.id 
+            WHERE a.id = ?''', (courseID,))
