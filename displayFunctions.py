@@ -11,11 +11,24 @@ def printLabelsAndAllRows(rows, desc):
             print(row[k[0]], end='\t')
         print()
 
+def printLabelsAndSingleRow(row, desc):
+   for k in desc:
+      print(k[0], end='\t')
+
+   print('\n--------------------------------------------------------------------------------')
+
+   for k in desc:
+      print(row[k[0]], end='\t')
+   print()
 
 def displayProgramList(c):
    rows = GetPrograms(c)
    printLabelsAndAllRows(rows, c.description)
    return
+
+def displayProgramById(c, programID):
+   row = GetProgramById(c, programID)
+   printLabelsAndSingleRow(row, c.description)
 
 def displayCourseList(c):
    rows = GetCourses(c)
