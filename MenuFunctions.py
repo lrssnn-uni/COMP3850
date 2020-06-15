@@ -40,8 +40,9 @@ def ManageProgramsMenu(c):
         ManageProgramMenu(c, choice)
     
 def CreateProgramMenu(c):
-    # TODO
-    print("Create Program...")
+    print("Creating New Program...")
+    name = input("Program Name: ")
+    AddProgram(c, name)
 
 def ManageProgramMenu(c, programID):
     print(f"Managing Program {programID}")

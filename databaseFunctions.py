@@ -1,6 +1,6 @@
 
 def GetProgramIDByName(c, ProgramName):
-    c.execute('SELECT id FROM Programs WHERE Program_Name = ?', (ProgramName,))
+    c.execute('SELECT id FROM Programs WHERE name = ?', (ProgramName,))
     return c.fetchone()[0]
 
 # 1. Program Management
@@ -17,11 +17,11 @@ def GetNumPrograms(c):
     return c.fetchone()[0]
 
 def AddProgram(c, programName):
-  c.execute('INSERT INTO Programs(Program_Name) VALUES (?)', (programName,))
+  c.execute('INSERT INTO Programs(name) VALUES (?)', (programName,))
   return
 
 def RemoveProgram(c, ProgramName):
-    c.execute('DELETE FROM Programs WHERE Program_Name = ?', (ProgramName,))
+    c.execute('DELETE FROM Programs WHERE name = ?', (ProgramName,))
     return
 
 def GetCoursesInProgram(c, programID):
