@@ -1,16 +1,16 @@
-CREATE TABLE IF NOT EXISTS Programs (
+CREATE TABLE Programs (
     id INTEGER PRIMARY KEY, 
     name TEXT
 );
 
-CREATE TABLE IF NOT EXISTS Courses (
+CREATE TABLE Courses (
     id INTEGER PRIMARY KEY, 
     course_code TEXT, 
     name TEXT, 
     year_level INTEGER
 );
 
-CREATE TABLE IF NOT EXISTS Course_In_Program (
+CREATE TABLE Course_In_Program (
     program_id INTEGER, 
     course_id INTEGER, 
     directed_group INTEGER,
@@ -18,7 +18,7 @@ CREATE TABLE IF NOT EXISTS Course_In_Program (
     FOREIGN KEY(course_id) REFERENCES Courses(id)
 );
 
-CREATE TABLE IF NOT EXISTS Course_Precedence (
+CREATE TABLE Course_Precedence (
     course_before_id INTEGER, 
     course_after_id INTEGER, 
     requirement_group INTEGER, 
@@ -27,7 +27,7 @@ CREATE TABLE IF NOT EXISTS Course_Precedence (
     FOREIGN KEY(course_after_id) REFERENCES Courses(id)
 );
 
-CREATE TABLE IF NOT EXISTS Directed_Course_Requirements (
+CREATE TABLE Directed_Course_Requirements (
     program_id INTEGER, 
     directed_group INTEGER, 
     number_required INTEGER,
