@@ -1,6 +1,23 @@
 from displayFunctions import *
 from databaseFunctions import *
 
+def getIntegerChoiceNoMax(minRange):
+    valid = False
+    while(not valid):
+        try:
+            i = int(input(f'Choice ({minRange}+): '))
+        except ValueError:
+            print("Invalid Input: Please input a number")
+            valid = False
+            continue
+        # We have a valid number, check range
+        if(i >= minRange):
+            valid = True
+        else:
+            print("Invalid Input: Too Low")
+            valid = False
+    return i
+
 def getIntegerChoice(minRange, maxRange):
     valid = False
     while(not valid):
@@ -17,6 +34,17 @@ def getIntegerChoice(minRange, maxRange):
             print("Invalid Input: Outside range")
             valid = False
     return i
+
+def getCourseIDWithOptionalCourseCode(c):
+    inp = input("Course ID or Course Code: ")
+    # Check for a number
+    try:
+        id = int(inp)
+        # We have a number
+    except ValueError:
+        # We don't have a number - Course Code
+        id = GetCourseIdByCourseCode(c, inp)
+    return id
 
 def MainMenu(c):
     print("Program Advisory Tool - Database Administration Console")
@@ -77,37 +105,44 @@ def ManageCoursesInProgramMenu(c, programID):
 
 def AddCourseToProgramMenu(c, programID):
     print("Adding Course To Program...")
-    inp = input("Course ID or Course Code: ")
-    # Check for a number
-    try:
-        id = int(inp)
-        # We have a number
-        AddCourseToProgram(c, programID, id, 0)
-    except ValueError:
-        # We don't have a number - Course Code
-        id = GetCourseIdByCourseCode(c, inp)
-        AddCourseToProgram(c, programID, id, 0)
-
+    id = getCourseIDWithOptionalCourseCode(c)
+    AddCourseToProgram(c, programID, id, 1)
 
 def RemoveCourseFromProgramMenu(c, programID):
-    #TODO
-    print("Remove Course From Program")
+    print("Remove Which Course?")
+    id = getCourseIDWithOptionalCourseCode(c)
+    RemoveCourseFromProgram(c, programID, id)
 
 def AddCourseToDirectedGroupMenu(c, programID):
-    #TODO
-    print("Add Course To Directed Group")
+    print("Which Course?")
+    courseId = getCourseIDWithOptionalCourseCode(c)
+    numGroups = GetNumDirectedGroupsByProgram(c, programID)
+    groupNum = getIntegerChoice(1, numGroups)
+    SetCourseInDirectedGroup(c, programID, courseId, groupNum)
 
 def RemoveCourseFromDirectedGroupMenu(c, programID):
-    #TODO
-    print("Add Course To Program")
+    # Note: This is just "Adding" a course to directed group 0
+    print("Which Course?")
+    courseId = getCourseIDWithOptionalCourseCode(c)
+    SetCourseInDirectedGroup(c, programID, courseId, 0)
 
 def AddDirectedGroupToProgramMenu(c, programID):
-    #TODO
-    print("Add Directed Group To Program")
+    print("Current Groups:")
+    displayDirectedGroupsByProgram(c, programID)
+    print("How many courses must be completed?")
+    numCourses = getIntegerChoiceNoMax(1)
+    # Due to database structure we need to auto-increment the group numbers (ew)
+    nextGroup = CalculateNextDirectedGroupNumber(c, programID)
+    AddDirectedGroupToProgram(c, programID, nextGroup, numCourses)
 
 def RemoveDirectedGroupFromProgramMenu(c, programID):
-    #TODO
-    print("Remove Directed Group From Program")
+    print("Current Groups:")
+    displayDirectedGroupsByProgram(c, programID)
+    print("Delete Which Group?")
+    choice = getIntegerChoice(1, GetNumDirectedGroupsByProgram(c, programID))
+    RemoveDirectedGroupFromProgram(c, programID, choice)
+    # Remove The Courses
+    RemoveAllCoursesFromProgramByDirectedGroup(c, programID, choice)
 
 def DeleteProgramMenu(c, programID):
     #TODO

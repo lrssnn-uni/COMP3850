@@ -45,7 +45,11 @@ def RemoveCourseFromProgram(c, programID, courseID):
     return
 
 def GetDirectedGroupsByProgram(c, programID):
-    return c.execute('SELECT * FROM Directed_Course_Requirements WHERE program_id = ?', (programID,))
+    return c.execute('SELECT directed_group AS grp_num, number_required AS requirement FROM Directed_Course_Requirements WHERE program_id = ?', (programID,))
+
+def GetNumDirectedGroupsByProgram(c, programID):
+    c.execute('SELECT count(directed_group) FROM Directed_Course_Requirements WHERE program_id = ?', (programID,))
+    return c.fetchone()[0]
 
 def GetCoursesInDirectedGroup(c, programID, directedGroup):
     return c.execute('SELECT * FROM Course_In_Program JOIN Courses ON Course_In_Program.Course_ID = Courses.ID WHERE Course_In_Program.Program_ID = ? AND Course_In_Program.directed_group = ?', (programID, directedGroup))
@@ -57,6 +61,17 @@ def AddDirectedGroupToProgram(c, programID, groupNumber, requiredCourses):
 def RemoveDirectedGroupFromProgram(c, programID, groupNumber):
     c.execute('DELETE FROM Directed_Course_Requirements WHERE program_id = ? AND directed_group = ?', (programID, groupNumber))
     return
+
+def SetCourseInDirectedGroup(c, programID, courseID, groupNumber):
+    c.execute('UPDATE Course_In_Program SET directed_group = ? WHERE program_id = ? AND course_id = ?', (groupNumber, programID, courseID))
+
+def CalculateNextDirectedGroupNumber(c, programID):
+    c.execute('SELECT max(directed_group) FROM Directed_Course_Requirements WHERE program_id = ?', (programID,))
+    return c.fetchone()[0] + 1
+
+# That's a mouthful
+def RemoveAllCoursesFromProgramByDirectedGroup(c, programID, groupNumber):
+    c.execute('DELETE FROM Course_In_Program WHERE program_id = ? AND directed_group = ?', (programID, groupNumber))
 
 # 2. Course Management:
 def GetCourses(c):

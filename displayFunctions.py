@@ -44,3 +44,8 @@ def displayCoursePrecedents(c, courseID):
    rows = GetCoursePrecedents(c, courseID) 
    printLabelsAndAllRows(rows, c.description)
    return
+
+def displayDirectedGroupsByProgram(c, programID):
+   rows = GetDirectedGroupsByProgram(c, programID)
+   printLabelsAndAllRows(rows, c.description)
+   return
