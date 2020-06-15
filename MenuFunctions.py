@@ -76,8 +76,18 @@ def ManageCoursesInProgramMenu(c, programID):
         RemoveDirectedGroupFromProgramMenu(c, programID)
 
 def AddCourseToProgramMenu(c, programID):
-    #TODO
-    print("Add Course To Program")
+    print("Adding Course To Program...")
+    inp = input("Course ID or Course Code: ")
+    # Check for a number
+    try:
+        id = int(inp)
+        # We have a number
+        AddCourseToProgram(c, programID, id, 0)
+    except ValueError:
+        # We don't have a number - Course Code
+        id = GetCourseIdByCourseCode(c, inp)
+        AddCourseToProgram(c, programID, id, 0)
+
 
 def RemoveCourseFromProgramMenu(c, programID):
     #TODO

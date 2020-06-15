@@ -63,6 +63,10 @@ def GetCourses(c):
   res = c.execute('''SELECT * FROM Courses''')
   return res
 
+def GetCourseIdByCourseCode(c, courseCode):
+    c.execute('SELECT id FROM Courses WHERE course_code = ?', (courseCode,))
+    return c.fetchone()[0]
+
 def AddCourse(c, courseCode, courseName, yearLevel):
   c.execute('INSERT INTO Courses(course_code, name, year_level) VALUES (?,?,?)', (courseCode, courseName, yearLevel))
   return
