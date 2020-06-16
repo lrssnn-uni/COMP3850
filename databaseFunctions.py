@@ -101,9 +101,23 @@ def GetCoursePrecedents(c, courseID):
         '''SELECT 
                 b.id AS id, 
                 b.course_code as course_code, 
+                p.requirement_group AS grp,
                 b.name AS name 
             FROM 
                 course_precedence AS p 
             JOIN courses AS a ON p.course_after_id = a.id 
             JOIN courses AS b ON p.course_before_id = b.id 
             WHERE a.id = ?''', (courseID,))
+
+def GetNumCourses(c):
+    c.execute('SELECT Count(id) FROM Courses')
+    return c.fetchone()[0]
+
+def AddPrecedentToCourse(c, courseAfterId, courseBeforeId, precedenceGroup):
+    c.execute("INSERT INTO Course_Precedence (course_before_id, course_after_id, requirement_group, hard) VALUES (?,?,?,1)", (courseBeforeId, courseAfterId, precedenceGroup))
+
+def RemovePrecedentFromCourse(c, courseAfterId, courseBeforeId):
+    c.execute("DELETE FROM Course_Precedence WHERE course_before_id = ? AND course_after_id = ?", (courseBeforeId, courseAfterId))
+
+def SetCoursePrecedenceGroup(c, courseAfterId, courseBeforeId, precedenceGroup):
+    c.execute("UPDATE Course_Precedence SET requirement_group = ? WHERE course_before_id = ? AND course_after_id = ?", (precedenceGroup, courseBeforeId, courseAfterId))

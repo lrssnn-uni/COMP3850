@@ -160,5 +160,66 @@ def DeleteProgramMenu(c, programID):
     print("Program Deleted")
 
 def ManageCoursesMenu(c):
-    #TODO
-    print("Course Management")
+    print("Current Courses: ")
+    displayCourseList(c)
+    print("Manage which course? (0 = Create New Course)")
+    choice = getIntegerChoice(0, GetNumCourses(c))
+    if choice == 0:
+        CreateCourseMenu(c)
+    else:
+        ManageCourseMenu(c, choice)
+
+def CreateCourseMenu(c):
+    print("Creating New Course...")
+    code = input("Course Code: ")
+    name = input("Course Name: ")
+    # Due to course code structure, year level is the fifth character in the code
+    yearLevel = code[4]
+    AddCourse(c, code, name, yearLevel)
+
+def ManageCourseMenu(c, courseID):
+    print(f'Managing Course #{courseID}')
+    print("(1) Manage Precedents")
+    print("(2) Delete Course")
+    choice = getIntegerChoice(1,2)
+    if choice == 1:
+        ManageCoursePrecedentsMenu(c, courseID)
+    else:
+        DeleteCourseMenu(c, courseID)
+
+def ManageCoursePrecedentsMenu(c, courseID):
+    print("Current Precedents")
+    displayCoursePrecedents(c, courseID)
+    print("(1) Add Precedent          (2) Remove Precedent")
+    print("(3) Add Precedent to Group (4) Remove Precedent From Group")
+    choice = getIntegerChoice(1, 4)
+    if choice == 1:
+        AddPrecedentMenu(c, courseID)
+    elif choice == 2:
+        RemovePrecedentMenu(c, courseID)
+    elif choice == 3:
+        SetPrecedentGroupMenu(c, courseID)
+    else:
+        RemovePrecedentGroupMenu(c, courseID)
+
+def AddPrecedentMenu(c, courseID):
+    print("Add which course as precedent?")
+    id = getCourseIDWithOptionalCourseCode(c)
+    AddPrecedentToCourse(c, courseID, id, 0)
+
+def RemovePrecedentMenu(c, courseID):
+    print("Remove which course as precedent?")
+    id = getCourseIDWithOptionalCourseCode(c)
+    RemovePrecedentFromCourse(c, courseID, id)
+
+def SetPrecedentGroupMenu(c, courseID):
+    print("Set group for which course?")
+    id = getCourseIDWithOptionalCourseCode(c)
+    print("New Group #")
+    group = getIntegerChoiceNoMax(1)
+    SetCoursePrecedenceGroup(c, courseID, id, group)
+
+def RemovePrecedentGroupMenu(c, courseID):
+    print("Remove Which Course From its group?")
+    id = getCourseIDWithOptionalCourseCode(c)
+    SetCoursePrecedenceGroup(c, courseID, id, 0)
