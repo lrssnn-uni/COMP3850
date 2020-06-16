@@ -1,7 +1,5 @@
 import sqlite3
-from databaseFunctions import *
-from displayFunctions import *
-from MenuFunctions import *
+from menu_functions import main_menu
 
 conn = sqlite3.connect('C:\\Users\\nikla\\COMP3850\\DATABASE.sqlite')
 conn.row_factory = sqlite3.Row
@@ -9,7 +7,7 @@ conn.row_factory = sqlite3.Row
 c = conn.cursor()
 
 # Main Menu
-commit = MainMenu(c)
+commit = main_menu(c)
 
 if commit:
     conn.commit()
