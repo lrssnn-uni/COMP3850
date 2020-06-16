@@ -20,8 +20,8 @@ def AddProgram(c, programName):
   c.execute('INSERT INTO Programs(name) VALUES (?)', (programName,))
   return
 
-def RemoveProgram(c, ProgramName):
-    c.execute('DELETE FROM Programs WHERE name = ?', (ProgramName,))
+def RemoveProgram(c, programID):
+    c.execute('DELETE FROM Programs WHERE id = ?', (programID,))
     return
 
 def GetCoursesInProgram(c, programID):
@@ -72,6 +72,12 @@ def CalculateNextDirectedGroupNumber(c, programID):
 # That's a mouthful
 def RemoveAllCoursesFromProgramByDirectedGroup(c, programID, groupNumber):
     c.execute('DELETE FROM Course_In_Program WHERE program_id = ? AND directed_group = ?', (programID, groupNumber))
+
+def RemoveAllDirectedGroupsFromProgram(c, programID):
+    c.execute('DELETE FROM Directed_Course_Requirements WHERE program_id = ?', (programID,))
+
+def RemoveAllCoursesFromProgram(c, programID):
+    c.execute('DELETE FROM Course_In_Program WHERE program_id = ?', (programID,))
 
 # 2. Course Management:
 def GetCourses(c):

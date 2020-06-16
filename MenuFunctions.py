@@ -46,16 +46,24 @@ def getCourseIDWithOptionalCourseCode(c):
         id = GetCourseIdByCourseCode(c, inp)
     return id
 
+# Returns Whether or not we want to commit changes
 def MainMenu(c):
-    print("Program Advisory Tool - Database Administration Console")
-    print("What would you like to manage?")
-    print("(1) Manage Programs")
-    print("(2) Manage Courses")
-    choice = getIntegerChoice(1,2)
-    if(choice == 1):
-        ManageProgramsMenu(c)
-    else:
-        ManageCoursesMenu(c)
+    while True:
+        print("Program Advisory Tool - Database Administration Console")
+        print("What would you like to manage?")
+        print("(1) Manage Programs")
+        print("(2) Manage Courses")
+        print("(3) Discard Changes and Quit")
+        print("(4) Save And Quit")
+        choice = getIntegerChoice(1,4)
+        if(choice == 1):
+            ManageProgramsMenu(c)
+        elif(choice == 2):
+            ManageCoursesMenu(c)
+        elif(choice == 3):
+            return False
+        else:
+            return True
 
 def ManageProgramsMenu(c):
     print("Current Programs:")
@@ -145,8 +153,11 @@ def RemoveDirectedGroupFromProgramMenu(c, programID):
     RemoveAllCoursesFromProgramByDirectedGroup(c, programID, choice)
 
 def DeleteProgramMenu(c, programID):
-    #TODO
-    print("Are you sure?")
+    # Delete All Directed Groups, Delete All Courses In Program, Delete Program
+    RemoveAllDirectedGroupsFromProgram(c, programID)
+    RemoveAllCoursesFromProgram(c, programID)
+    RemoveProgram(c, programID)
+    print("Program Deleted")
 
 def ManageCoursesMenu(c):
     #TODO
