@@ -122,3 +122,12 @@ def remove_precedent_from_course(c, course_after_id, course_before_id):
 
 def set_course_precedence_group(c, course_after_id, course_before_id, precedence_group):
     c.execute("UPDATE Course_Precedence SET requirement_group = ? WHERE course_before_id = ? AND course_after_id = ?", (precedence_group, course_before_id, course_after_id))
+
+def remove_all_course_precedence_records_by_precedent(c, course_id):
+    c.execute("DELETE FROM Course_Precedence WHERE course_before_id = ?", (course_id,))
+
+def remove_all_course_precedence_records_by_successor(c, course_id):
+    c.execute("DELETE FROM Course_Precedence WHERE course_after_id = ?", (course_id,))
+
+def remove_course_from_all_programs(c, course_id):
+    c.execute("DELETE FROM Course_In_Program WHERE course_id = ?", (course_id,))

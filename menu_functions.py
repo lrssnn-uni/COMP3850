@@ -225,5 +225,11 @@ def remove_precedent_group_menu(c, course_id):
     set_course_precedence_group(c, course_id, id, 0)
 
 def delete_course_menu(c, course_id):
-    #TODO
-    pass
+    # Delete course precedence records with this course
+    # Both as a precedent, and as the successor
+    remove_all_course_precedence_records_by_precedent(c, course_id)
+    remove_all_course_precedence_records_by_successor(c, course_id)
+    # Delete course from any program
+    remove_course_from_all_programs(c, course_id)
+    # Finally delete the course
+    remove_course(c, course_id)
