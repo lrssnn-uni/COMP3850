@@ -1,6 +1,7 @@
 from database_functions import *
 
 def print_labels_and_all_rows(rows, desc):
+    print('--------------------------------------------------------------------------------')
     for key in desc:
         print(key[0], end='\t')
 
@@ -11,7 +12,10 @@ def print_labels_and_all_rows(rows, desc):
             print(row[key[0]], end='\t')
         print()
 
+    print('--------------------------------------------------------------------------------')
+
 def print_labels_and_single_row(row, desc):
+    print('--------------------------------------------------------------------------------')
     for key in desc:
         print(key[0], end='\t')
 
@@ -20,6 +24,8 @@ def print_labels_and_single_row(row, desc):
     for key in desc:
         print(row[key[0]], end='\t')
     print()
+
+    print('--------------------------------------------------------------------------------')
 
 def display_program_list(c):
     rows = get_programs(c)

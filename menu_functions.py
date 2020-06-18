@@ -16,6 +16,7 @@ def get_integer_choice_no_max(min_range):
         else:
             print("Invalid Input: Too Low")
             valid = False
+    print("") # Spacing to make menus more readable
     return i
 
 def get_integer_choice(min_range, max_range):
@@ -33,6 +34,7 @@ def get_integer_choice(min_range, max_range):
         else:
             print("Invalid Input: Outside range")
             valid = False
+    print("") # Spacing to make menus more readable
     return i
 
 def get_course_id_with_optional_course_code(c):
